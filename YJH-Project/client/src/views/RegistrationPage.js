@@ -32,6 +32,8 @@ const styles = {
 
 const RegistrationPage = props => {
 
+    const {SCB} = props;
+
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [password, setPassword] = useState("");
@@ -43,10 +45,15 @@ const RegistrationPage = props => {
         password.length > 0 ? 
             passwordConfirmation.length > 0 ?
                 password === passwordConfirmation ?
-                    navigate('/registration/step/two')
+                    navigateFunction()
                 : setErrorMessage('Both password and password confirmation should match!')
             : setErrorMessage('Password confirmation can not be empty!')
         : setErrorMessage('Password can not be empty!')
+    }
+
+    const navigateFunction = () =>{
+        SCB(firstname, lastname);
+        navigate('/registration/step/two');
     }
 
     return (

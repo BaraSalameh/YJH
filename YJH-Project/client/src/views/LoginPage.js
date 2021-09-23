@@ -95,7 +95,7 @@ const LoginPage = props => {
                 </form>
             </Paper>
         </div>
-      );
+    );
 }
 
 export default LoginPage
