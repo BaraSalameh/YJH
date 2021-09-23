@@ -7,6 +7,7 @@ import {
     Button,
   } from '@material-ui/core';
 import {Link, navigate} from '@reach/router';
+import axios from 'axios';
 
 const styles = {
     paper: {
@@ -42,18 +43,30 @@ const RegistrationPage = props => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        password.length > 0 ? 
-            passwordConfirmation.length > 0 ?
-                password === passwordConfirmation ?
-                    navigateFunction()
-                : setErrorMessage('Both password and password confirmation should match!')
-            : setErrorMessage('Password confirmation can not be empty!')
-        : setErrorMessage('Password can not be empty!')
+        firstname.length >= 2 ?
+            lastname.length >= 2 ?
+                password.length >= 8 ? 
+                    passwordConfirmation.length >= 8 ?
+                        password === passwordConfirmation ?
+                            navigateFunction()
+                        : setErrorMessage('Both password and password confirmation should match!')
+                    : setErrorMessage('Password confirmation can not be less than 8 characters!')
+                : setErrorMessage('Password can not be less than 8 characters!')
+            : setErrorMessage('Last name can not be less than 2 characters!')
+        : setErrorMessage('First name can not be less than 2 characters!')
     }
 
     const navigateFunction = () =>{
         SCB(firstname, lastname);
-        navigate('/registration/step/two');
+
+        axios.post('http://localhost:8000/api/user/new', {
+            firstname, lastname, password
+        })
+        .then(res => {
+            console.log(res);
+            navigate('/registration/step/two');
+        })
+        .catch(err => console.log("error adding new user"));
     }
 
     return (
@@ -65,17 +78,29 @@ const RegistrationPage = props => {
                         <InputLabel>First Name</InputLabel>
                         <OutlinedInput type="text" onChange={e => setFirstname(e.target.value)}/>
                     </FormControl>
+                    {
+                        errorMessage === 'First name can not be less than 2 characters!' ?
+                            <p style={styles.errorParagraph}>First name can not be less than 2 characters!</p>
+                        :
+                        ""
+                    }
                     <FormControl variant="outlined" style={styles.input}>
                         <InputLabel>Last Name</InputLabel>
                         <OutlinedInput type="text" onChange={e => setLastname(e.target.value)}/>
                     </FormControl>
+                    {
+                        errorMessage === 'Last name can not be less than 2 characters!' ?
+                            <p style={styles.errorParagraph}>Last name can not be less than 2 characters!</p>
+                        :
+                        ""
+                    }
                     <FormControl variant="outlined" style={styles.input}>
                         <InputLabel>Password</InputLabel>
                         <OutlinedInput type="password" onChange={e => setPassword(e.target.value)}/>
                     </FormControl>
                     {
-                        errorMessage === 'Password can not be empty!' ?
-                            <p style={styles.errorParagraph}>Password can not be empty!</p>
+                        errorMessage === 'Password can not be less than 8 characters!' ?
+                            <p style={styles.errorParagraph}>Password can not be less than 8 characters!</p>
                         :
                         ""
                     }
@@ -84,8 +109,8 @@ const RegistrationPage = props => {
                         <OutlinedInput type="password" onChange={e => setPasswordConfirmation(e.target.value)}/>
                     </FormControl>
                     {
-                        errorMessage === 'Password confirmation can not be empty!' ?
-                            <p style={styles.errorParagraph}>Password confirmation can not be empty!</p>
+                        errorMessage === 'Password confirmation can not be less than 8 characters!' ?
+                            <p style={styles.errorParagraph}>Password confirmation can not be less than 8 characters!</p>
                         :
                         errorMessage === 'Both password and password confirmation should match!' ?
                             <p style={styles.errorParagraph}>Both password and password confirmation should match!</p>

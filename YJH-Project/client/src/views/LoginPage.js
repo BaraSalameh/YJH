@@ -11,19 +11,19 @@ import {
   import {Link, navigate} from '@reach/router';
 
 const styles = {
+    background : {
+        background : 'linear-gradient(#0B486B, #F56217)', display : 'inline-block', 
+        height : '100%', width : '100%'
+    },
     paper: {
-      display : 'flex', flexDirection : 'column', padding : '1rem', textAlign : 'center', width : '20rem', 
-      margin : '7.39rem auto', background : 'linear-gradient(#FFEFBA, #EAEAEA)'
+      display : 'flex', flexDirection : 'column', padding : '1rem', textAlign : 'center', width : '25%', height : '50%', 
+       background : 'linear-gradient(#FFEFBA, #EAEAEA)', margin: '7.38rem auto'
     },
     form : {
       display : 'flex', flexDirection : 'column', padding : '1rem'
     },
     input: {
         marginBottom: "1rem"
-    },
-    background : {
-        background : 'linear-gradient(#0B486B, #F56217)', height : '100%', width : '100%', display : 'inline-block',
-        margin : '0rem'
     },
     paragraph : {
         fontFamily : '"Times New Roman'
