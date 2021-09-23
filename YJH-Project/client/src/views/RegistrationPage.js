@@ -24,6 +24,9 @@ const styles = {
     },
     paragraph : {
         fontFamily : '"Times New Roman'
+    },
+    errorParagraph : {
+        color : 'red', fontFamily : '"Times New Roman', marginTop : '0.5px'
     }
 }
 
@@ -33,6 +36,7 @@ const RegistrationPage = props => {
     const [lastname, setLastname] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -40,9 +44,9 @@ const RegistrationPage = props => {
             passwordConfirmation.length > 0 ?
                 password === passwordConfirmation ?
                     navigate('/registration/step/two')
-                : alert('Both password and password confirmation should match!')
-            : alert('Password confirmation field can not be empty')
-        : alert('Password field can not be empty!')
+                : setErrorMessage('Both password and password confirmation should match!')
+            : setErrorMessage('Password confirmation can not be empty!')
+        : setErrorMessage('Password can not be empty!')
     }
 
     return (
@@ -62,10 +66,25 @@ const RegistrationPage = props => {
                         <InputLabel>Password</InputLabel>
                         <OutlinedInput type="password" onChange={e => setPassword(e.target.value)}/>
                     </FormControl>
+                    {
+                        errorMessage === 'Password can not be empty!' ?
+                            <p style={styles.errorParagraph}>Password can not be empty!</p>
+                        :
+                        ""
+                    }
                     <FormControl variant="outlined" style={styles.input}>
                         <InputLabel>Password Confirmation</InputLabel>
                         <OutlinedInput type="password" onChange={e => setPasswordConfirmation(e.target.value)}/>
                     </FormControl>
+                    {
+                        errorMessage === 'Password confirmation can not be empty!' ?
+                            <p style={styles.errorParagraph}>Password confirmation can not be empty!</p>
+                        :
+                        errorMessage === 'Both password and password confirmation should match!' ?
+                            <p style={styles.errorParagraph}>Both password and password confirmation should match!</p>
+                        :
+                        ""
+                    }
                     <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
                         Register
                     </Button>

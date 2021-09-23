@@ -27,12 +27,16 @@ const styles = {
     },
     paragraph : {
         fontFamily : '"Times New Roman'
+    },
+    errorParagraph : {
+        color : 'red', fontFamily : '"Times New Roman', marginTop : '0.5px'
     }
 }
 
 const LoginPage = props => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -41,10 +45,13 @@ const LoginPage = props => {
                 username === 'yazan.hazboun' ?
                     password === 'yj' ?
                         navigate('/main')
-                    : alert('Wrong username or password!')
-                : alert('Wrong username or password!')
-            : alert('Password can not be empty!')
-        : alert('Username can not be empty!')
+                    : setErrorMessage('Wrong username or password!')
+                : setErrorMessage('Wrong username or password!')
+            : setErrorMessage('Password can not be empty!')
+        : setErrorMessage('Username can not be empty!')
+
+        setUsername("");
+        setPassword("");
     }
     return (
         <div style={styles.background}>
@@ -53,12 +60,27 @@ const LoginPage = props => {
                 <form style={styles.form}>
                     <FormControl variant="outlined" style={styles.input}>
                         <InputLabel>Username</InputLabel>
-                        <OutlinedInput type="text" onChange={e => setUsername(e.target.value)}/>
+                        <OutlinedInput type="text" onChange={e => setUsername(e.target.value)} value={username} />
                     </FormControl>
+                    {
+                        errorMessage === 'Username can not be empty!' ?
+                            <p style={styles.errorParagraph}>Username can not be empty!</p>
+                        :
+                        ""
+                    }
                     <FormControl variant="outlined" style={styles.input}>
                         <InputLabel>Password</InputLabel>
-                        <OutlinedInput type="password" onChange={e => setPassword(e.target.value)}/>
+                        <OutlinedInput type="password" onChange={e => setPassword(e.target.value)} value={password}/>
                     </FormControl>
+                    {
+                        errorMessage === 'Wrong username or password!' ?
+                            <p style={styles.errorParagraph}>Wrong username or password!</p>
+                        :
+                        errorMessage === 'Password can not be empty!' ?
+                            <p style={styles.errorParagraph}>Password can not be empty!</p>
+                        :
+                        ""
+                    }
                     <FormControlLabel
                         style={styles.input}
                         value="end"
