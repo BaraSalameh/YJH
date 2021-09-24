@@ -9,6 +9,7 @@ import {
     FormControlLabel
   } from '@material-ui/core';
   import {Link, navigate} from '@reach/router';
+  import axios from 'axios';
 
 const styles = {
     background : {
@@ -37,13 +38,15 @@ const LoginPage = props => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [user, setUser] = useState([]);
 
     const handleSubmit = e => {
         e.preventDefault();
+        authenticated();
         username.length > 0 ? 
             password.length > 0 ?
-                username === 'yazan.hazboun' ?
-                    password === 'yj' ?
+                username === user.username ?
+                    password === user.password ?
                         navigate('/main')
                     : setErrorMessage('Wrong username or password!')
                 : setErrorMessage('Wrong username or password!')
@@ -52,6 +55,12 @@ const LoginPage = props => {
 
         setUsername("");
         setPassword("");
+    }
+
+    const authenticated = () => {
+        axios.get('http://localhost:8000/api/user/'+username)
+        .then(res => setUser(res.data))
+        .catch(err => console.log("error retrieving user!"));
     }
     return (
         <div style={styles.background}>

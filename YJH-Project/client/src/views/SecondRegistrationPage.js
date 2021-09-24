@@ -9,6 +9,7 @@ import {
     MenuItem
   } from '@material-ui/core';
 import { navigate } from '@reach/router';
+import axios from 'axios';
 
 const styles = {
     paper: {
@@ -35,14 +36,17 @@ const styles = {
 
 const SecondRegistrationPage = props => {
 
-    const {firstname, lastname, SCB} = props;
+    const {firstname, lastname, username, SCB} = props;
 
     const [hourMoney, setHourMoney] = useState(0);
     const [currency, setCurrency] = useState("");
 
     const handleSubmit = e => {
         e.preventDefault();
-        SCB(hourMoney);
+        axios.put('http://localhost:8000/api/user/update/'+username+'/'+hourMoney)
+        .then(res => console.log('updated successfully'))
+        .catch(err => console.log('error updating'));
+        SCB(hourMoney, currency);
         navigate('/main');
     }
 
@@ -50,6 +54,7 @@ const SecondRegistrationPage = props => {
         <div style={styles.background}>
             <Paper elevation={7} style={styles.paper}>
                 <h2 style={styles.paragraph}>{firstname} {lastname}</h2>
+                <p style={styles.paragraph}>{username}</p>
                 <form style={styles.form}>
                     <FormControl variant="outlined" style={styles.input}>
                         <InputLabel>How much you get paid per hour?</InputLabel>

@@ -9,7 +9,8 @@ const UserSchema = new mongoose.Schema({
         type : String,
         // minlength : [2, "Last name should be at least 2 characters!"]
     },
-	username : {type : String
+	username : {
+        type : String
     },
     password : {
         type : String,

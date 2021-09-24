@@ -37,6 +37,7 @@ const RegistrationPage = props => {
 
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -45,29 +46,35 @@ const RegistrationPage = props => {
         e.preventDefault();
         firstname.length >= 2 ?
             lastname.length >= 2 ?
-                password.length >= 8 ? 
-                    passwordConfirmation.length >= 8 ?
-                        password === passwordConfirmation ?
-                            navigateFunction()
-                        : setErrorMessage('Both password and password confirmation should match!')
-                    : setErrorMessage('Password confirmation can not be less than 8 characters!')
+                username.length >= 5 ?
+                    password.length >= 8 ? 
+                        passwordConfirmation.length >= 8 ?
+                            password === passwordConfirmation ?
+                                navigateFunction()
+                            : setErrorMessage('Both password and password confirmation should match!')
+                        : setErrorMessage('Password confirmation can not be less than 8 characters!')
+                    : setErrorMessage('Username can not be less than 5 characters!')
                 : setErrorMessage('Password can not be less than 8 characters!')
             : setErrorMessage('Last name can not be less than 2 characters!')
         : setErrorMessage('First name can not be less than 2 characters!')
     }
 
     const navigateFunction = () =>{
-        SCB(firstname, lastname);
-
-        axios.post('http://localhost:8000/api/user/new', {
-            firstname, lastname, password
-        })
+        axios.get('http://localhost:8000/api/user/'+username)
         .then(res => {
-            console.log(res);
-            navigate('/registration/step/two');
-        })
-        .catch(err => console.log("error adding new user"));
-    }
+            res.data !== null ?
+                setErrorMessage('Username or email is already exists!')
+            :
+            axios.post('http://localhost:8000/api/user/new',{
+                firstname, lastname, username, password
+            })
+            .then(res => {
+                SCB(firstname, lastname,username);
+                navigate('/registration/step/two');
+            })
+            .catch(err => console.log('err adding new user'));
+        });
+    };
 
     return (
         <div style={styles.background}>
@@ -91,6 +98,22 @@ const RegistrationPage = props => {
                     {
                         errorMessage === 'Last name can not be less than 2 characters!' ?
                             <p style={styles.errorParagraph}>Last name can not be less than 2 characters!</p>
+                        :
+                        ""
+                    }
+                    <FormControl variant="outlined" style={styles.input}>
+                        <InputLabel>Username or email</InputLabel>
+                        <OutlinedInput type="text" onChange={e => setUsername(e.target.value)}/>
+                    </FormControl>
+                    {
+                        errorMessage === 'Username can not be less than 5 characters!' ?
+                            <p style={styles.errorParagraph}>Username can not be less than 5 characters!</p>
+                        :
+                        ""
+                    }
+                    {
+                        errorMessage === 'Username or email is already exists!' ?
+                            <p style={styles.errorParagraph}>Username or email is already exists!</p>
                         :
                         ""
                     }
