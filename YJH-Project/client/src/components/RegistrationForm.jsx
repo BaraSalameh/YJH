@@ -21,7 +21,8 @@ const styles = {
         marginBottom: "1rem"
     },
     background : {
-        background : 'linear-gradient(#0B486B, #F56217)', height : '100%', width : '100%', display : 'inline-block'
+        background : 'linear-gradient(#0B486B, #F56217)', height : '100%', width : '100%', 
+        display : 'inline-block'
     },
     paragraph : {
         fontFamily : '"Times New Roman'

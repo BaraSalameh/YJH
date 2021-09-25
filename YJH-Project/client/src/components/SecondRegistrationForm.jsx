@@ -14,7 +14,7 @@ import axios from 'axios';
 const styles = {
     paper: {
       display : 'flex', flexDirection : 'column', padding : '1rem', textAlign : 'center', width : '20rem', 
-      margin : '11.9rem auto', background : 'linear-gradient(#FFEFBA, #EAEAEA)'
+      margin : '11.05rem auto', background : 'linear-gradient(#FFEFBA, #EAEAEA)'
     },
     form : {
       display : 'flex', flexDirection : 'column', padding : '1rem'
@@ -40,13 +40,20 @@ const SecondRegistrationForm = props => {
 
     const [hourMoney, setHourMoney] = useState(0);
     const [currency, setCurrency] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSubmit = e => {
         e.preventDefault();
+        hourMoney > 0 ?
+            readyToGo()
+        :
+            setErrorMessage('The amount of money should be greater than 0!')
+    };
+
+    const readyToGo = () => {
         axios.put('http://localhost:8000/api/user/update/'+username+'/'+hourMoney)
-        .then(res => console.log('updated successfully'))
+        .then(res => navigate('/main/'+username))
         .catch(err => console.log('error updating'));
-        navigate('/main/'+username);
     }
 
     return (
@@ -58,6 +65,10 @@ const SecondRegistrationForm = props => {
                         <InputLabel>How much you get paid per hour?</InputLabel>
                         <OutlinedInput type="number" onChange={e => setHourMoney(e.target.value)}/>
                     </FormControl>
+                    {
+                        errorMessage.length > 0 &&
+                            <p style={styles.errorParagraph}>The amount of money should be greater than 0!</p>
+                    }
                     <FormControl style={styles.input}>
                         <InputLabel id="demo-simple-select-label">Currency</InputLabel>
                         <Select
