@@ -37,9 +37,9 @@ const DayCalculation = props => {
     const {username} = props;
 
     const [ user, setUser ] = useState([]);
-    const [result, setResult] = useState(0);
-    const [hours, setHours] = useState(0);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [ result, setResult ] = useState(0);
+    const [ hours, setHours ] = useState(0);
+    const [ errorMessage, setErrorMessage ] = useState("");
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/user/'+username)
@@ -49,16 +49,28 @@ const DayCalculation = props => {
     
     const handleSubmit = e => {
         e.preventDefault();
-        hours > 10 ?
-            setResult(((hours-10)*(user.hourMoney*1.5)) + (2*(user.hourMoney*1.25)) + (8*user.hourMoney) + hours*5 )
+        hours > (user.perHour[0].firstPeriod + user.perHour[0].secondPeriod) ?
+            setResult(
+                (hours - (user.perHour[0].firstPeriod + user.perHour[0].secondPeriod)) * (user.perHour[0].hourMoney * (user.perHour[0].thirdPercentage/100))
+                + (user.perHour[0].secondPeriod * (user.perHour[0].hourMoney *(user.perHour[0].secondPercentage/100))) 
+                + (user.perHour[0].firstPeriod * user.perHour[0].hourMoney)
+                + (hours * user.perHour[0].bonus)
+            )
+        : 
+        hours > user.perHour[0].firstPeriod ?
+            setResult(
+                ((hours - user.perHour[0].firstPeriod) * (user.perHour[0].hourMoney *(user.perHour[0].secondPercentage/100))) 
+                + (user.perHour[0].firstPeriod * user.perHour[0].hourMoney)
+                + (hours * user.perHour[0].bonus)
+            )
+        : 
+        hours > 0 ?
+            setResult(
+                (hours * user.perHour[0].hourMoney)
+                + (hours * user.perHour[0].bonus)
+            )
         :
-        hours >8 ?
-            setResult(((hours-8)*(user.hourMoney*125)/100) + (8*user.hourMoney) + hours*5)
-        :
-        hours <= 8 && hours > 0?
-            setResult(hours*user.hourMoney + hours*5)
-        :
-        setErrorMessage('Hours can not be empty or 0!')
+        setErrorMessage("hours can't be 0")
     }
 
     const backHandle = () => {
