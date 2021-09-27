@@ -100,7 +100,10 @@ const SecondRegistrationForm = props => {
     const readyToGo = () => {
         axios.put('http://localhost:8000/api/user/update/'+username, {firstPeriod, secondPeriod, 
         secondPercentage, thirdPercentage, hourMoney, bonus})
-        .then(res => navigate('/main/'+username))
+        .then(res => {
+            console.log('should be updated');
+            navigate('/main/'+username);
+        })
         .catch(err => console.log('error updating'));  
     };
 
@@ -206,7 +209,7 @@ const SecondRegistrationForm = props => {
                             </>
                             
                     }
-                    <Button style={styles.input} type="submit" variant="contained" color="" onClick={handleShifts}>
+                    <Button style={styles.input} type="submit" variant="contained" color="default" onClick={handleShifts}>
                         Shifts
                     </Button>
                     {

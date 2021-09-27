@@ -50,7 +50,7 @@ const MainForm = props => {
                 <Button style={ styles.input } type="submit" variant="contained" color="primary" onClick={dayHandle}>
                     Day
                 </Button>
-                <Button style={ styles.input } type="submit" variant="contained" color="info" onClick={weekHandle}>
+                <Button style={ styles.input } type="submit" variant="contained" color="default" onClick={weekHandle}>
                     Week
                 </Button>
                 <Button style={ styles.input } type="submit" variant="contained" color="primary" onClick={monthHandle}>

@@ -11,7 +11,7 @@ module.exports.getUser = (request, response) => {
     .catch(err => response.json(err))
 }
 module.exports.updateUser = (request, response) => {
-    User.findOneAndUpdate({username : request.params.username}, {$set :{hourMoney : request.params.hourMoney}}, {new:true})
-    .then(res => response.json(res))
+    User.findOneAndUpdate({username : request.params.username}, {$push :{perHour : request.body}})
+    .then(res =>  response.json(res))
     .catch(err => response.json(err))
 }
