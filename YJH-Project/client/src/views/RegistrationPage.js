@@ -6,7 +6,7 @@ const RegistrationPage = props => {
         <div>
             <RegistrationForm />
         </div>
-    )
+    );
 }
 
 export default RegistrationPage

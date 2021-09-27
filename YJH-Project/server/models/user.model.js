@@ -16,9 +16,26 @@ const UserSchema = new mongoose.Schema({
         type : String,
         // minlength:[8,"Password should be at least 8 characters!"]
     },
-    hourMoney : {
-        type : Number
-    },
+    perHour : [{
+        firstPeriod : {
+            type : Number
+        },
+        secondPeriod : {
+            type : Number
+        },
+        secondPercentage : {
+            type : Number
+        },
+        thirdPercentage : {
+            type : Number
+        },
+        hourMoney : {
+            type : Number
+        },
+        bonus : {
+            type : Number
+        }
+    }]
 }, {timestamps : true});
 
 module.exports.User = mongoose.model('User', UserSchema);
