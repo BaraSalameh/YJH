@@ -66,35 +66,42 @@ const SecondRegistrationForm = props => {
     };
 
     const validation = () => {
-        if(isLoaded === 'perHour'){
-            if(firstPeriod > 0){
-                if(secondPeriod > 0){
-                    if(secondPercentage < 100){
-                        setErrorMessage("Second period percentage can't be less than 100%");
-                    }else{
-                        if(hourMoney > 0){
-                            if(thirdPercentage > 0 && thirdPercentage < 100){
-                                setErrorMessage("Third period percentage can't be less than 100!");
-                            }else{
-                                readyToGo();
-                            }
-                        }else{
-                            setErrorMessage("Amount of money can't be 0");
-                        }
-                    }
-                }else if(secondPercentage > 0){
-                        setErrorMessage("You can't insert a percentage for a not existed period");
-                    }
+        isLoaded === 'perHour' ?
+            firstPeriod > 0 ?
+                hourMoney > 0 ?
+                    secondStepValidation()
+                :
+                setErrorMessage("Amount of money can't be 0")
+            :
+            setErrorMessage("You can't proceed without having a first period")
+        :
+        setErrorMessage("You can't proceed without having a recipient way")
+    }; 
+
+    const secondStepValidation = () => {
+        if(thirdPercentage > 100){
+            if(secondPeriod > 0){
+                if(secondPercentage > 100){
+                    readyToGo();
+                }else{
+                    setErrorMessage("Second period percentage can't be less than 100%");
+                }
             }else{
-                setErrorMessage("You can't proceed without having a first period");
+                setErrorMessage("You can't have a third period without second one");
             }
         }else{
-            if(isLoaded === 'shifts'){
-
+            if(secondPeriod > 0){
+                if(secondPercentage > 100){
+                    readyToGo();
+                }else{
+                    setErrorMessage("Second period percentage can't be less than 100%");
+                }
+            }else if(secondPercentage > 0 || secondPercentage < 0){
+                setErrorMessage("You can't insert a percentage for a not existed period");
             }else{
-                setErrorMessage("You can't proceed without having a recipient way");
+                readyToGo();
             }
-        } 
+        }
     };
 
     const readyToGo = () => {
@@ -192,6 +199,10 @@ const SecondRegistrationForm = props => {
                                 {
                                     errorMessage === "Third period percentage can't be less than 100!" &&
                                         <p style={styles.errorParagraph}>Third period percentage can't be less than 100!</p>
+                                }
+                                {
+                                   errorMessage === "You can't have a third period without second one" &&
+                                    <p style={styles.errorParagraph}>You can't have a third period without second one</p>
                                 }
                                 <FormControl variant="outlined" style={styles.input}>
                                     <InputLabel>Money per hour</InputLabel>
